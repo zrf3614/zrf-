@@ -26,6 +26,7 @@
 
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
+
 /* TIM2 init function */
 void MX_TIM2_Init(void)
 {
@@ -69,7 +70,6 @@ void MX_TIM2_Init(void)
   /* USER CODE END TIM2_Init 2 */
 
 }
-
 /* TIM3 init function */
 void MX_TIM3_Init(void)
 {
@@ -200,6 +200,22 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
   /* USER CODE BEGIN TIM2_MspDeInit 1 */
 
   /* USER CODE END TIM2_MspDeInit 1 */
+  }
+}
+
+void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
+{
+
+  if(tim_pwmHandle->Instance==TIM3)
+  {
+  /* USER CODE BEGIN TIM3_MspDeInit 0 */
+
+  /* USER CODE END TIM3_MspDeInit 0 */
+    /* Peripheral clock disable */
+    __HAL_RCC_TIM3_CLK_DISABLE();
+  /* USER CODE BEGIN TIM3_MspDeInit 1 */
+
+  /* USER CODE END TIM3_MspDeInit 1 */
   }
 }
 

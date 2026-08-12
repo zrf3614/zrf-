@@ -17,7 +17,7 @@ void BREATH_Step(void)
     HAL_Delay(20);
 }
 
-/* 呼吸灯复位：占空比归零、熄灭 LED3/4（进入任何新模式前调用，防"灯不灭"） */
+/* 呼吸灯复位，第一次运行发现相互切换模式，另一个模式不会灭 */
 void BREATH_Init(void)
 {
     s_duty = 0;

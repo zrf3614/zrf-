@@ -29,6 +29,7 @@
 #include "TIM_IRQHandler.h"
 #include "EXTI_IRQHandler.h"
 #include "stdint.h"
+#include "UART_IRQHandler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -93,8 +94,10 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_USART1_UART_Init(); 
   /* USER CODE BEGIN 2 */
   BEEP_INIT();
+  USART_Start_Receive(); 
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,37 +107,38 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    while (1)
-    {
-        Key_WaitPress();            
+    // while (1)
+    // {
+    //     Key_WaitPress();            
 
         
-        if (Key_GetDuration() >= KEY_LONG_MS)
-        {
-            BEEP_ALARM(3);
-            BREATH_Init();               /* 熄灭呼吸灯（LED3/4 占空比归零） */
-            while (1)
-            {
-                if (Key_PressPending) break;
-                LED_WATER();
-            }
-        }
-        else
-        {
-            BEEP_ALARM(1);
-            LED_OFF(1);                  /* 熄灭流水灯，呼吸从暗开始 */
-            LED_OFF(2);
-            BREATH_Init();
-            while (1)
-            {
-                if (Key_PressPending) break;
-                BREATH_Step();
-            }
-        }
+    //     if (Key_GetDuration() >= KEY_LONG_MS)
+    //     {
+    //         BEEP_ALARM(3);
+    //         BREATH_Init();               /* 熄灭呼吸灯 */
+    //         while (1)
+    //         {
+    //             if (Key_PressPending) break;  /* AI帮忙加了保险 */
+    //             LED_WATER();
+    //         }
+    //     }
+    //     else
+    //     {
+    //         BEEP_ALARM(1);
+    //         LED_OFF(1);                  /* 熄灭流水灯 */
+    //         LED_OFF(2);
+    //         BREATH_Init();
+    //         while (1)
+    //         {
+    //             if (Key_PressPending) break;   /* AI帮忙加了保险 */
+    //             BREATH_Step();
+    //         }
+    //     }
      
-    }  
-    
-
+    // }  
+    while(Beef_count==0);
+   BEEP_ALARM(Beef_count);
+  Beef_count=0;
   }  
   
 
