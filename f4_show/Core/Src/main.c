@@ -1,24 +1,28 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2026 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
+#include "can.h"
+#include "dma.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -27,9 +31,12 @@
 #include "Beep.h"
 #include "key.h"
 #include "TIM_IRQHandler.h"
+#include "led_breath.h"
 #include "EXTI_IRQHandler.h"
 #include "stdint.h"
 #include "UART_IRQHandler.h"
+#include "CAN_IRQHandler.h"
+#include "myostask.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +61,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -71,7 +79,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  static float s_phase = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -92,13 +100,28 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
-  MX_USART1_UART_Init(); 
+  MX_USART1_UART_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
   BEEP_INIT();
-  USART_Start_Receive(); 
+  BREATH_Init();
+  UART_Start_Receive();
+
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -109,13 +132,12 @@ int main(void)
     /* USER CODE BEGIN 3 */
     // while (1)
     // {
-    //     Key_WaitPress();            
+    //     Key_WaitPress();
 
-        
     //     if (Key_GetDuration() >= KEY_LONG_MS)
     //     {
     //         BEEP_ALARM(3);
-    //         BREATH_Init();               /* 熄灭呼吸灯 */
+    //         BREATH_Init();               /* 熄灭呼吸�??????? */
     //         while (1)
     //         {
     //             if (Key_PressPending) break;  /* AI帮忙加了保险 */
@@ -125,7 +147,7 @@ int main(void)
     //     else
     //     {
     //         BEEP_ALARM(1);
-    //         LED_OFF(1);                  /* 熄灭流水灯 */
+    //         LED_OFF(1);                  /* 熄灭流水�??????? */
     //         LED_OFF(2);
     //         BREATH_Init();
     //         while (1)
@@ -134,13 +156,45 @@ int main(void)
     //             BREATH_Step();
     //         }
     //     }
-     
-    // }  
-    while(Beef_count==0);
-   BEEP_ALARM(Beef_count);
-  Beef_count=0;
-  }  
-  
+
+    // }
+    /*----------------------------------------vofa正弦�???----------------------------------*/
+    // float sinf_result = sinf(s_phase);
+    // s_phase += 0.1f;
+    // uint8_t tail[8]={0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x7F};
+    // memcpy(tail,&sinf_result,4); //memcpy(tail, &sinf_result, 8) 我想实现的是把sinf_result4个字节拷贝到tail数组的前4个字节中，后4个字节保持不�????
+    // HAL_UART_Transmit(&huart1, tail, 8, 100);  //教程只介绍了传入库函数，传出函数AI给的
+    // HAL_Delay(20);
+
+    /*-------------------------------------忘记是什么功能了-----------------------------*/
+    //   while(Beef_count==0);
+    //   LED_TOGGLE(1);
+    //  BEEP_ALARM(Beef_count);
+    //   Beef_count=0;
+    /*----------------------------------------8.13can作业--------------------------------*/
+    // if(Beef_count)
+    // {
+    //   BEEP_ALARM(Beef_count);
+    //   Beef_count = 0;
+    //   SendOK_1();
+    // }
+    // if(State)
+    // {
+    //   State=0;
+    //   if(Led_state)
+    //   {
+    //   SendOK_2();
+    //   while(Led_state)
+    //   {
+    //     LED_WATER();
+    //   }
+    //   }
+    // else
+    // {
+    //   SendOK_2();
+    // }
+    // }
+  }
 
   /* USER CODE END 3 */
 }
@@ -211,7 +265,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  TIM_PeriodElapsedCallback(htim);
   /* USER CODE END Callback 1 */
 }
 

@@ -10,11 +10,16 @@
                 "d:\\f4_show\\f4_show\\Drivers\\CMSIS\\Include",
                 "d:\\f4_show\\f4_show\\HDL\\inc",
                 "d:\\f4_show\\f4_show\\IRQ\\inc",
+                "d:\\f4_show\\f4_show\\Middlewares\\Third_Party\\FreeRTOS\\Source\\include",
+                "d:\\f4_show\\f4_show\\Middlewares\\Third_Party\\FreeRTOS\\Source\\CMSIS_RTOS_V2",
+                "d:\\f4_show\\f4_show\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\GCC\\ARM_CM4F",
                 "d:\\f4_show\\f4_show\\MDK-ARM",
                 "d:\\f4_show\\f4_show\\Core\\Src",
                 "d:\\f4_show\\f4_show\\Drivers\\STM32F4xx_HAL_Driver\\Src",
                 "d:\\f4_show\\f4_show\\HDL\\src",
                 "d:\\f4_show\\f4_show\\IRQ\\src",
+                "d:\\f4_show\\f4_show\\Middlewares\\Third_Party\\FreeRTOS\\Source",
+                "d:\\f4_show\\f4_show\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\MemMang",
                 "${default}"
             ],
             "defines": [

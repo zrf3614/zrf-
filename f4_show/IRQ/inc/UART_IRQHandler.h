@@ -6,5 +6,6 @@
 extern volatile uint8_t Beef_count;
   /* 本来是 extern的，AI认为应该在.c里定义，改为extern volatile uint8_t Beef_count; */
   
-void USART_Start_Receive(void);
+void UART_Start_Receive(void);
+
 #endif

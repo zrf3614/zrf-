@@ -1,0 +1,23 @@
+*** Using Compiler 'V6.18', folder: 'D:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'f4_show'
+assembling startup_stm32f405xx.s...
+compiling CAN_IRQHandler.c...
+compiling TIM_IRQHandler.c...
+compiling freertos.c...
+compiling main.c...
+../HDL/src/myostask.c(65): warning: implicitly declaring library function 'memcpy' with type 'void *(void *, const void *, unsigned int)' [-Wimplicit-function-declaration]
+   memcpy(tx_data,&data,4);
+   ^
+../HDL/src/myostask.c(65): note: include the header <string.h> or explicitly provide a declaration for 'memcpy'
+1 warning generated.
+compiling myostask.c...
+linking...
+f4_show\f4_show.axf: Error: L6200E: Symbol Send_Data multiply defined (by myostask.o and freertos.o).
+f4_show\f4_show.axf: Error: L6200E: Symbol Beef_Task multiply defined (by myostask.o and freertos.o).
+f4_show\f4_show.axf: Error: L6200E: Symbol Noise_Task multiply defined (by myostask.o and freertos.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 3 error messages.
+"f4_show\f4_show.axf" - 3 Error(s), 1 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:01
